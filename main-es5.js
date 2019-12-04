@@ -120,6 +120,7 @@ var AppComponent = /** @class */ (function () {
     };
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     AppComponent.prototype.onBarcodeReaderComplete = function (result) {
+        console.log(result);
         if (result.status === 0) {
             // BarcodeReader object was successfully created
             this.logMsgElement.innerHTML = "<b>Log:</b><br>BarcodeReader object successfully created";
@@ -201,8 +202,9 @@ var AppComponent = /** @class */ (function () {
         }
     };
     AppComponent.prototype.openBarcodeReader = function () {
+        var _this = this;
         if (!this.defaultReader) {
-            this.defaultReader = new BarcodeReader(null, this.onBarcodeReaderComplete);
+            this.defaultReader = new BarcodeReader(null, function (result) { return _this.onBarcodeReaderComplete(result); });
         }
     };
     AppComponent.prototype.closeBarcodeReader = function (isAutoClose) {
