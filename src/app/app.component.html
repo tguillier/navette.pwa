@@ -1,0 +1,16 @@
+<h3>Basic BarcodeReader API Sample</h3>
+<input type="button" value="Open Reader" id="openButton" (click)="openButtonClicked()">
+<input type="button" value="Close Reader" id="closeButton" (click)="closeButtonClicked()" disabled>
+<br>
+<div>
+  <b>Barcode Data Read</b><br>
+  <label for="BarcodeData">Data:</label><input type="text" id="BarcodeData" size=20 /><br>
+  <label for="SymbType">Symbology:</label><input type="text" id="SymbType" size=16 /><br>
+  <label for="ReadTime">Time:</label><input type="text" id="ReadTime" size=24 /><br>
+</div>
+<br>
+<div id="logMsg">
+  <b>Log:</b>
+</div>
+
+<router-outlet></router-outlet>
