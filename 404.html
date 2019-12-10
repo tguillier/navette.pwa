@@ -1,69 +1,14 @@
-<html>
-     <head>
-          <title>Basic Barcode Reader</title>
-          <base href="https://tguillier.github.io/navette.pwa/">
-          <script type="text/javascript" src="BarcodeReader.js"></script>
-          <script type="text/javascript">
-          var defaultScanner;
-
-          // On page load create a BarcodeReader object
-          function setup ()
-          {
-              defaultScanner = new BarcodeReader(null,
-                   onBarcodeReaderComplete);
-          }
-          // After BarcodeReader object is created we can configure our
-         // symbologies and add our event listener.
-         function onBarcodeReaderComplete ( result )
-         {
-              if (result.status == 0)
-              {
-                   // BarcodeReader object was successfully created.
-                   // Configure the symbologies needed.
-                   defaultScanner.set("Symbology", "Code39", "Enable",
-                        "true", onSetComplete);
-                   defaultScanner.set("Symbology", "Code128", "EnableCode128",
-                        "true", onSetComplete);
-                  
-                   // Add an event handler for the barcodedataready event
-                   defaultScanner.addEventListener("barcodedataready",
-                        onBarcodeDataReady, false);
-               }
-               else
-               {
-                    defaultScanner = null;
-                    alert('Failed to create BarcodeReader, '
-                         + result.message);
-               }
-          }
-
-          // Verify the symbology configuration.  
-          function onSetComplete ( result )
-          {
-               if (result.status != 0)
-               {
-                    alert('set Family: ' + result.family + ', Key: ' +
-                         result.key + ', Option: ' + result.option +
-                         ', Value: ' + result.value + 'failed. ' +
-                         result.message);
-               }
-          }
-
-          // Handle barcode data when available.
-          function onBarcodeDataReady (data, type, time)
-          {
-               document.getElementById("BarcodeData").value = data;
-               document.getElementById("SymbType").value = type;
-               document.getElementById("ReadTime").value = time;
-          }
-          </script>
-     </head>
-     <body onload="setup();">
-          <label for="BarcodeData">Data:</label>
-          <input type="text" id="BarcodeData" size=12/><br>
-          <label for="SymbType">Symbology:</label>
-          <input type="text" id="SymbType" size=12/><br>
-          <label for="ReadTime">Time:</label>
-          <input type="text" id="ReadTime" size=12/><br>
-     </body>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Navette.PWA</title>
+  <base href="https://tguillier.github.io/navette.pwa/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="BarcodeReader.js"></script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+<script src="runtime-es2015.js" type="module"></script><script src="polyfills-es2015.js" type="module"></script><script src="runtime-es5.js" nomodule></script><script src="polyfills-es5.js" nomodule></script><script src="styles-es2015.js" type="module"></script><script src="styles-es5.js" nomodule></script><script src="vendor-es2015.js" type="module"></script><script src="main-es2015.js" type="module"></script><script src="vendor-es5.js" nomodule></script><script src="main-es5.js" nomodule></script></body>
 </html>
