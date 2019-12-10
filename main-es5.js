@@ -203,8 +203,10 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.openBarcodeReader = function () {
         var _this = this;
+        console.log(this.defaultReader);
         if (!this.defaultReader) {
-            this.defaultReader = new BarcodeReader(null, function (result) { return _this.onBarcodeReaderComplete(result); });
+            this.defaultReader = new a.BarcodeReader(null, function (result) { return _this.onBarcodeReaderComplete(result); });
+            console.log(this.defaultReader);
         }
     };
     AppComponent.prototype.closeBarcodeReader = function (isAutoClose) {

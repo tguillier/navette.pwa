@@ -199,8 +199,10 @@ let AppComponent = class AppComponent {
         }
     }
     openBarcodeReader() {
+        console.log(this.defaultReader);
         if (!this.defaultReader) {
-            this.defaultReader = new BarcodeReader(null, result => this.onBarcodeReaderComplete(result));
+            this.defaultReader = new a.BarcodeReader(null, result => this.onBarcodeReaderComplete(result));
+            console.log(this.defaultReader);
         }
     }
     closeBarcodeReader(isAutoClose) {
