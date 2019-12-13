@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3>Basic BarcodeReader API Sample</h3>\n\n<input type=\"button\" value=\"Open Reader\" id=\"openButton\" (click)=\"openButtonClicked()\">\n<input type=\"button\" value=\"Close Reader\" id=\"closeButton\" (click)=\"closeButtonClicked()\" disabled>\n\n<br>\n\n<div>\n  <b>Barcode Data Read</b><br>\n  <label for=\"BarcodeData\">Data:</label><input type=\"text\" id=\"BarcodeData\" size=20 /><br>\n  <label for=\"SymbType\">Symbology:</label><input type=\"text\" id=\"SymbType\" size=16 /><br>\n  <label for=\"ReadTime\">Time:</label><input type=\"text\" id=\"ReadTime\" size=24 /><br>\n</div>\n\n<br>\n\n<div id=\"logMsg\">\n  <b>Log:</b>\n</div>\n\n<router-outlet></router-outlet>"
+module.exports = "<h3>Basic BarcodeReader API Sample</h3>\n\n<input type=\"button\" value=\"Open Reader\" id=\"openButton\" (click)=\"openBarcodeReader()\" [disabled]=\"openButtonDisabled\">\n<input type=\"button\" value=\"Close Reader\" id=\"closeButton\" (click)=\"closeBarcodeReader()\" [disabled]=\"closeButtonDisabled\">\n\n<br>\n\n<div>\n  <b>Barcode Data Read</b><br>\n  <label for=\"BarcodeData\">Data:</label><input type=\"text\" id=\"BarcodeData\" size=20 [value]=\"barcodeDataText\" /><br>\n  <label for=\"SymbType\">Symbology:</label><input type=\"text\" id=\"SymbType\" size=16 [value]=\"symbTypeText\" /><br>\n  <label for=\"ReadTime\">Time:</label><input type=\"text\" id=\"ReadTime\" size=24 [value]=\"readTimeText\" /><br>\n</div>\n\n<br>\n\n<div id=\"logMsg\">\n  <b>Log:</b>\n  <div [innerHTML]=\"logMessage\"></div>\n</div>\n\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -74,7 +74,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "input[type=button] {\n  /* top right bottom left */\n  margin: 5px 20px 10px 0px;\n}\n\ninput[type=text] {\n  margin: 5px 10px;\n}\n\nselect {\n  margin: 5px 20px 10px 0px;\n  padding: 1px 0px 1px 0px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQzpcXFVzZXJzXFx0Z3VpbGxpZVxcc291cmNlXFxyZXBvc1xcbmF2ZXR0ZS5wd2Evc3JjXFxhcHBcXGFwcC5jb21wb25lbnQuc2NzcyIsInNyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsMEJBQUE7RUFDQSx5QkFBQTtBQ0NGOztBREVBO0VBQ0UsZ0JBQUE7QUNDRjs7QURFQTtFQUNFLHlCQUFBO0VBQ0Esd0JBQUE7QUNDRiIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbImlucHV0W3R5cGU9XCJidXR0b25cIl0ge1xyXG4gIC8qIHRvcCByaWdodCBib3R0b20gbGVmdCAqL1xyXG4gIG1hcmdpbjogNXB4IDIwcHggMTBweCAwcHg7XHJcbn1cclxuXHJcbmlucHV0W3R5cGU9XCJ0ZXh0XCJdIHtcclxuICBtYXJnaW46IDVweCAxMHB4O1xyXG59XHJcblxyXG5zZWxlY3Qge1xyXG4gIG1hcmdpbjogNXB4IDIwcHggMTBweCAwcHg7XHJcbiAgcGFkZGluZzogMXB4IDBweCAxcHggMHB4O1xyXG59IiwiaW5wdXRbdHlwZT1idXR0b25dIHtcbiAgLyogdG9wIHJpZ2h0IGJvdHRvbSBsZWZ0ICovXG4gIG1hcmdpbjogNXB4IDIwcHggMTBweCAwcHg7XG59XG5cbmlucHV0W3R5cGU9dGV4dF0ge1xuICBtYXJnaW46IDVweCAxMHB4O1xufVxuXG5zZWxlY3Qge1xuICBtYXJnaW46IDVweCAyMHB4IDEwcHggMHB4O1xuICBwYWRkaW5nOiAxcHggMHB4IDFweCAwcHg7XG59Il19 */"
+module.exports = "input[type=button] {\n  /* top right bottom left */\n  margin: 5px 20px 10px 0px;\n}\n\ninput[type=text] {\n  margin: 5px 10px;\n}\n\nselect {\n  margin: 5px 20px 10px 0px;\n  padding: 1px 0px 1px 0px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQzpcXFVzZXJzXFx0Z3VpbGxpZVxcc291cmNlXFxyZXBvc1xcTmF2ZXR0ZS5QV0FcXG5hdmV0dGUuYW5ndWxhci9zcmNcXGFwcFxcYXBwLmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9hcHAuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSwwQkFBQTtFQUNBLHlCQUFBO0FDQ0Y7O0FERUE7RUFDRSxnQkFBQTtBQ0NGOztBREVBO0VBQ0UseUJBQUE7RUFDQSx3QkFBQTtBQ0NGIiwiZmlsZSI6InNyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW5wdXRbdHlwZT1cImJ1dHRvblwiXSB7XHJcbiAgLyogdG9wIHJpZ2h0IGJvdHRvbSBsZWZ0ICovXHJcbiAgbWFyZ2luOiA1cHggMjBweCAxMHB4IDBweDtcclxufVxyXG5cclxuaW5wdXRbdHlwZT1cInRleHRcIl0ge1xyXG4gIG1hcmdpbjogNXB4IDEwcHg7XHJcbn1cclxuXHJcbnNlbGVjdCB7XHJcbiAgbWFyZ2luOiA1cHggMjBweCAxMHB4IDBweDtcclxuICBwYWRkaW5nOiAxcHggMHB4IDFweCAwcHg7XHJcbn0iLCJpbnB1dFt0eXBlPWJ1dHRvbl0ge1xuICAvKiB0b3AgcmlnaHQgYm90dG9tIGxlZnQgKi9cbiAgbWFyZ2luOiA1cHggMjBweCAxMHB4IDBweDtcbn1cblxuaW5wdXRbdHlwZT10ZXh0XSB7XG4gIG1hcmdpbjogNXB4IDEwcHg7XG59XG5cbnNlbGVjdCB7XG4gIG1hcmdpbjogNXB4IDIwcHggMTBweCAwcHg7XG4gIHBhZGRpbmc6IDFweCAwcHggMXB4IDBweDtcbn0iXX0= */"
 
 /***/ }),
 
@@ -97,147 +97,114 @@ __webpack_require__.r(__webpack_exports__);
 
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
-        this.readerAutoClosed = false;
+        this.barcodeDataText = '';
+        this.symbTypeText = '';
+        this.readTimeText = '';
+        this.openButtonDisabled = false;
+        this.closeButtonDisabled = true;
+        this.logMessage = '';
         // Use the component constructor to inject providers.
     }
-    AppComponent.prototype.ngOnInit = function () {
-        this.setup();
-    };
-    AppComponent.prototype.setup = function () {
-        this.openButton = document.getElementById("openButton");
-        this.closeButton = document.getElementById("closeButton");
-        this.logMsgElement = document.getElementById("logMsg");
-        this.barcodeDataText = document.getElementById("BarcodeData");
-        this.symbTypeText = document.getElementById("SymbType");
-        this.readTimeText = document.getElementById("ReadTime");
-        // Check whether the browser supports detection of the web page visibility.
-        if (typeof document.hidden !== "undefined") { // Standard HTML5 attribute
-            this.hidden = "hidden";
-            this.visibilityChange = "visibilitychange";
-        }
-        if (this.hidden && typeof document.addEventListener !== "undefined" &&
-            typeof document[this.hidden] !== "undefined") {
-            // Add an event listener for the visibility change of the web page.
-            document.addEventListener(this.visibilityChange, this.handleVisibilityChange, false);
-        }
-    };
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     AppComponent.prototype.onBarcodeReaderComplete = function (result) {
+        var _this = this;
         console.log(result);
         if (result.status === 0) {
             // BarcodeReader object was successfully created
-            this.logMsgElement.innerHTML = "<b>Log:</b><br>BarcodeReader object successfully created";
+            this.logMessage = 'BarcodeReader object successfully created';
             this.updateUI(true, true);
             // Configure the symbologies needed. Buffer the settings and commit them at once.
-            this.defaultReader.setBuffered("Symbology", "Code39", "Enable", "true", this.onSetBufferedComplete);
-            this.defaultReader.setBuffered("Symbology", "Code128", "EnableCode128", "true", this.onSetBufferedComplete);
-            this.defaultReader.commitBuffer(this.onCommitComplete);
+            this.defaultReader.setBuffered('Symbology', 'Code39', 'Enable', 'true', function (result) { return _this.onSetBufferedComplete(result); });
+            this.defaultReader.setBuffered('Symbology', 'Code128', 'EnableCode128', 'true', function (result) { return _this.onSetBufferedComplete(result); });
+            this.defaultReader.commitBuffer(function (resultArray) { return _this.onCommitComplete(resultArray); });
             // Add an event handler for the barcodedataready event
-            this.defaultReader.addEventListener("barcodedataready", this.onBarcodeDataReady, false);
+            this.defaultReader.addEventListener('barcodedataready', function (data, type, time) { return _this.onBarcodeDataReady(data, type, time); }, false);
             // Add an event handler for the window's beforeunload event
-            window.addEventListener("beforeunload", this.onBeforeUnload);
+            window.addEventListener('beforeunload', function (e) { return _this.onBeforeUnload(e); });
         }
         else {
             this.defaultReader = null;
-            this.logMsgElement.innerHTML += "<p style=\"color:red\">Failed to create BarcodeReader, status: " + result.status + ", message: " + result.message + "</p>";
-            alert('Failed to create BarcodeReader, ' + result.message);
+            this.logMessage += '<p style="color:red">Failed to create BarcodeReader, ' +
+                'status: ' + result.status + ', ' +
+                'message: ' + result.message + '</p>';
         }
     };
     // Verify the symbology configuration
     AppComponent.prototype.onSetBufferedComplete = function (result) {
         if (result.status !== 0) {
-            this.logMsgElement.innerHTML += "<p style=\"color:red\">setBuffered failed, status: " + result.status + ", message: " + result.message + "</p>";
-            this.logMsgElement.innerHTML += "<p>Family=" + result.family + " Key=" + result.key + " Option=" + result.option + "</p>";
+            this.logMessage += '<p style="color:red">setBuffered failed, status: ' + result.status + ', message: ' + result.message + '</p>';
+            this.logMessage += '<p>Family=' + result.family + ' Key=' + result.key + ' Option=' + result.option + '</p>';
         }
     };
     AppComponent.prototype.onCommitComplete = function (resultArray) {
+        var e_1, _a;
         if (resultArray.length > 0) {
-            for (var i = 0; i < resultArray.length; i++) {
-                var result = resultArray[i];
-                if (result.status !== 0) {
-                    this.logMsgElement.innerHTML += "<p style=\"color:red\">commitBuffer failed, status: " + result.status + ", message: " + result.message + "</p>";
-                    if (result.method === "getBuffered" || result.method === "setBuffered") {
-                        this.logMsgElement.innerHTML += "<p>Method=" + result.method +
-                            " Family=" + result.family + " Key=" + result.key +
-                            " Option=" + result.option + "</p>";
+            try {
+                for (var resultArray_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__values"](resultArray), resultArray_1_1 = resultArray_1.next(); !resultArray_1_1.done; resultArray_1_1 = resultArray_1.next()) {
+                    var result = resultArray_1_1.value;
+                    if (result.status !== 0) {
+                        this.logMessage += '<p style="color:red">commitBuffer failed, status: ' + result.status + ', message: ' + result.message + '</p>';
+                        if (result.method === 'getBuffered' || result.method === 'setBuffered') {
+                            this.logMessage += '<p>Method=' + result.method +
+                                ' Family=' + result.family +
+                                ' Key=' + result.key +
+                                ' Option=' + result.option + '</p>';
+                        }
                     }
                 }
-            } //endfor
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (resultArray_1_1 && !resultArray_1_1.done && (_a = resultArray_1.return)) _a.call(resultArray_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
         }
     };
     // Handle barcode data when available
     AppComponent.prototype.onBarcodeDataReady = function (data, type, time) {
-        this.barcodeDataText.value = data;
-        this.symbTypeText.value = type;
-        this.readTimeText.value = time;
+        this.barcodeDataText = data;
+        this.symbTypeText = type;
+        this.readTimeText = time;
     };
     AppComponent.prototype.updateUI = function (readerOpened, clearData) {
-        this.openButton.disabled = readerOpened;
-        this.closeButton.disabled = !readerOpened;
+        this.openButtonDisabled = readerOpened;
+        this.closeButtonDisabled = !readerOpened;
         if (clearData) {
-            this.barcodeDataText.value = "";
-            this.symbTypeText.value = "";
-            this.readTimeText.value = "";
-        }
-    };
-    /**
-     * If the browser supports visibility change event, we can close the
-     * BarcodeReader object when the web page is hidden and create a new
-     * instance of the BarcodeReader object when the page is visible. This
-     * logic is used to re-claim the barcode reader in case another
-     * application has claimed it when this page becomes hidden.
-     */
-    AppComponent.prototype.handleVisibilityChange = function () {
-        if (document[this.hidden]) // The web page is hidden
-         {
-            this.closeBarcodeReader(true);
-        }
-        else // The web page is visible
-         {
-            if (this.readerAutoClosed) {
-                // Note: If you switch to another tab and quickly switch back
-                // to the current tab, the following call may have no effect
-                // because the BarcodeReader may not be completely closed yet.
-                // Once the BarcodeReader is closed, you may use the Open Reader
-                // button to create a new BarcodeReader object.
-                this.openBarcodeReader();
-            }
+            this.barcodeDataText = '';
+            this.symbTypeText = '';
+            this.readTimeText = '';
         }
     };
     AppComponent.prototype.openBarcodeReader = function () {
         var _this = this;
-        console.log(this.defaultReader);
         if (!this.defaultReader) {
             this.defaultReader = new BarcodeReader(null, function (result) { return _this.onBarcodeReaderComplete(result); });
             console.log(this.defaultReader);
         }
     };
-    AppComponent.prototype.closeBarcodeReader = function (isAutoClose) {
+    AppComponent.prototype.closeBarcodeReader = function () {
         var _this = this;
         if (this.defaultReader) {
-            this.readerAutoClosed = isAutoClose;
             this.defaultReader.close(function (result) {
                 if (result.status === 0) {
-                    _this.logMsgElement.innerHTML += "<p style=\"color:blue\">BarcodeReader successfully closed.</p>";
+                    _this.logMessage += '<p style="color:blue">BarcodeReader successfully closed.</p>';
                     _this.defaultReader = null;
                     _this.updateUI(false, false);
-                    window.removeEventListener("beforeunload", _this.onBeforeUnload);
+                    window.removeEventListener('beforeunload', function (e) { return _this.onBeforeUnload(e); });
                 }
                 else {
-                    _this.logMsgElement.innerHTML += "<p style=\"color:red\">Failed to close BarcodeReader, status: " + result.status + ", message: " + result.message + "</p>";
+                    _this.logMessage += '<p style="color:red">Failed to close BarcodeReader, ' +
+                        'status: ' + result.status + ', ' +
+                        'message: ' + result.message + '</p>';
                 }
             });
         }
     };
-    AppComponent.prototype.openButtonClicked = function () {
-        this.openBarcodeReader();
-    };
-    AppComponent.prototype.closeButtonClicked = function () {
-        this.closeBarcodeReader(false);
-    };
     AppComponent.prototype.onBeforeUnload = function (e) {
-        var message = "Please close BarcodeReader before leaving this page.";
-        (e || window.event).returnValue = message;
+        var message = 'Please close BarcodeReader before leaving this page.';
+        e.returnValue = message;
         return message;
     };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -503,7 +470,7 @@ var HoneywellBarcodeReaderUtils = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\tguillie\source\repos\navette.pwa\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\tguillie\source\repos\Navette.PWA\navette.angular\src\main.ts */"./src/main.ts");
 
 
 /***/ })
