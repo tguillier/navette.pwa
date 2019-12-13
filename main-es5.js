@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3>Basic BarcodeReader API Sample</h3>\n\n<input type=\"button\" value=\"Open Reader\" id=\"openButton\" (click)=\"openBarcodeReader()\" [disabled]=\"openButtonDisabled\">\n<input type=\"button\" value=\"Close Reader\" id=\"closeButton\" (click)=\"closeBarcodeReader()\" [disabled]=\"closeButtonDisabled\">\n\n<br>\n\n<div>\n  <b>Barcode Data Read</b><br>\n  <label for=\"BarcodeData\">Data:</label><input type=\"text\" id=\"BarcodeData\" size=20 [value]=\"barcodeDataText\" /><br>\n  <label for=\"SymbType\">Symbology:</label><input type=\"text\" id=\"SymbType\" size=16 [value]=\"symbTypeText\" /><br>\n  <label for=\"ReadTime\">Time:</label><input type=\"text\" id=\"ReadTime\" size=24 [value]=\"readTimeText\" /><br>\n</div>\n\n<br>\n\n<div id=\"logMsg\">\n  <b>Log:</b>\n  <div [innerHTML]=\"logMessage\"></div>\n</div>\n\n<router-outlet></router-outlet>"
+module.exports = "<h3>Basic BarcodeReader API Sample</h3>\n\n<ul>\n  <li *ngFor=\"let name of readerNames\">{{ name }}</li>\n</ul>\n\n<input type=\"button\" value=\"Open Reader\" id=\"openButton\" (click)=\"openBarcodeReader()\" [disabled]=\"openButtonDisabled\">\n<input type=\"button\" value=\"Close Reader\" id=\"closeButton\" (click)=\"closeBarcodeReader()\" [disabled]=\"closeButtonDisabled\">\n\n<br>\n\n<div>\n  <b>Barcode Data Read</b><br>\n  <label for=\"BarcodeData\">Data:</label><input type=\"text\" id=\"BarcodeData\" size=20 [value]=\"barcodeDataText\" /><br>\n  <label for=\"SymbType\">Symbology:</label><input type=\"text\" id=\"SymbType\" size=16 [value]=\"symbTypeText\" /><br>\n  <label for=\"ReadTime\">Time:</label><input type=\"text\" id=\"ReadTime\" size=24 [value]=\"readTimeText\" /><br>\n</div>\n\n<br>\n\n<div id=\"logMsg\">\n  <b>Log:</b>\n  <div [innerHTML]=\"logMessage\"></div>\n</div>\n\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -97,6 +97,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
+        this.readerNames = [];
         this.barcodeDataText = '';
         this.symbTypeText = '';
         this.readTimeText = '';
@@ -107,7 +108,9 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.ngOnInit = function () {
         var barcodeReaders = new BarcodeReaders(function (result) { return console.log(result); });
-        console.log(barcodeReaders);
+        if (barcodeReaders != null) {
+            this.readerNames = barcodeReaders.getAvailableBarcodeReaders();
+        }
     };
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     AppComponent.prototype.onBarcodeReaderComplete = function (result) {
@@ -118,16 +121,16 @@ var AppComponent = /** @class */ (function () {
             this.logMessage = 'BarcodeReader object successfully created';
             this.updateUI(true, true);
             // Configure the symbologies needed. Buffer the settings and commit them at once.
-            this.defaultReader.setBuffered('Symbology', 'Code39', 'Enable', 'true', function (result) { return _this.onSetBufferedComplete(result); });
-            this.defaultReader.setBuffered('Symbology', 'Code128', 'EnableCode128', 'true', function (result) { return _this.onSetBufferedComplete(result); });
-            this.defaultReader.commitBuffer(function (resultArray) { return _this.onCommitComplete(resultArray); });
+            this.barcodeReader.setBuffered('Symbology', 'Code39', 'Enable', 'true', function (result) { return _this.onSetBufferedComplete(result); });
+            this.barcodeReader.setBuffered('Symbology', 'Code128', 'EnableCode128', 'true', function (result) { return _this.onSetBufferedComplete(result); });
+            this.barcodeReader.commitBuffer(function (resultArray) { return _this.onCommitComplete(resultArray); });
             // Add an event handler for the barcodedataready event
-            this.defaultReader.addEventListener('barcodedataready', function (data, type, time) { return _this.onBarcodeDataReady(data, type, time); }, false);
+            this.barcodeReader.addEventListener('barcodedataready', function (data, type, time) { return _this.onBarcodeDataReady(data, type, time); }, false);
             // Add an event handler for the window's beforeunload event
             window.addEventListener('beforeunload', function (e) { return _this.onBeforeUnload(e); });
         }
         else {
-            this.defaultReader = null;
+            this.barcodeReader = null;
             this.logMessage += '<p style="color:red">Failed to create BarcodeReader, ' +
                 'status: ' + result.status + ', ' +
                 'message: ' + result.message + '</p>';
@@ -183,18 +186,18 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.openBarcodeReader = function () {
         var _this = this;
-        if (!this.defaultReader) {
-            this.defaultReader = new BarcodeReader(null, function (result) { return _this.onBarcodeReaderComplete(result); });
-            console.log(this.defaultReader);
+        if (!this.barcodeReader) {
+            this.barcodeReader = new BarcodeReader(null, function (result) { return _this.onBarcodeReaderComplete(result); });
+            console.log(this.barcodeReader);
         }
     };
     AppComponent.prototype.closeBarcodeReader = function () {
         var _this = this;
-        if (this.defaultReader) {
-            this.defaultReader.close(function (result) {
+        if (this.barcodeReader) {
+            this.barcodeReader.close(function (result) {
                 if (result.status === 0) {
                     _this.logMessage += '<p style="color:blue">BarcodeReader successfully closed.</p>';
-                    _this.defaultReader = null;
+                    _this.barcodeReader = null;
                     _this.updateUI(false, false);
                     window.removeEventListener('beforeunload', function (e) { return _this.onBeforeUnload(e); });
                 }
