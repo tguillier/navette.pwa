@@ -107,9 +107,18 @@ var AppComponent = /** @class */ (function () {
         // Use the component constructor to inject providers.
     }
     AppComponent.prototype.ngOnInit = function () {
-        var barcodeReaders = new BarcodeReaders(function (result) { return console.log(result); });
-        if (barcodeReaders != null) {
-            this.readerNames = barcodeReaders.getAvailableBarcodeReaders();
+        var _this = this;
+        this.barcodeReaders = new BarcodeReaders(function (result) { return _this.refreshReaderNames(result); });
+    };
+    AppComponent.prototype.refreshReaderNames = function (result) {
+        if (result.status !== 0) {
+            alert('Failed to get barcode readers!');
+            return;
+        }
+        console.log(this.barcodeReaders);
+        if (this.barcodeReaders != null) {
+            this.readerNames = this.barcodeReaders.getAvailableBarcodeReaders();
+            console.log(this.readerNames);
         }
     };
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
