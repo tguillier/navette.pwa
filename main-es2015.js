@@ -102,6 +102,10 @@ let AppComponent = class AppComponent {
         this.logMessage = '';
         // Use the component constructor to inject providers.
     }
+    ngOnInit() {
+        let barcodeReaders = new BarcodeReaders(result => console.log(result));
+        console.log(barcodeReaders);
+    }
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     onBarcodeReaderComplete(result) {
         console.log(result);

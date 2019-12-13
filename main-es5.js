@@ -105,6 +105,10 @@ var AppComponent = /** @class */ (function () {
         this.logMessage = '';
         // Use the component constructor to inject providers.
     }
+    AppComponent.prototype.ngOnInit = function () {
+        var barcodeReaders = new BarcodeReaders(function (result) { return console.log(result); });
+        console.log(barcodeReaders);
+    };
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     AppComponent.prototype.onBarcodeReaderComplete = function (result) {
         var _this = this;
