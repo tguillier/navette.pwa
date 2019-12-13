@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3>Basic BarcodeReader API Sample</h3>\n\n<ul>\n  <li *ngFor=\"let name of readerNames\">{{ name }}</li>\n</ul>\n\n<input type=\"button\" value=\"Open Reader\" id=\"openButton\" (click)=\"openBarcodeReader()\" [disabled]=\"openButtonDisabled\">\n<input type=\"button\" value=\"Close Reader\" id=\"closeButton\" (click)=\"closeBarcodeReader()\" [disabled]=\"closeButtonDisabled\">\n\n<br>\n\n<div>\n  <b>Barcode Data Read</b><br>\n  <label for=\"BarcodeData\">Data:</label><input type=\"text\" id=\"BarcodeData\" size=20 [value]=\"barcodeDataText\" /><br>\n  <label for=\"SymbType\">Symbology:</label><input type=\"text\" id=\"SymbType\" size=16 [value]=\"symbTypeText\" /><br>\n  <label for=\"ReadTime\">Time:</label><input type=\"text\" id=\"ReadTime\" size=24 [value]=\"readTimeText\" /><br>\n</div>\n\n<br>\n\n<div id=\"logMsg\">\n  <b>Log:</b>\n  <div [innerHTML]=\"logMessage\"></div>\n</div>\n\n<router-outlet></router-outlet>"
+module.exports = "<h3>Basic BarcodeReader API Sample</h3>\n\n<div>\n  <label for=\"BarcodeData\">Data:</label>\n  <input type=\"text\" id=\"BarcodeData\" size=20 [value]=\"barcodeDataText\" /><br>\n\n  <label for=\"SymbType\">Symbology:</label>\n  <input type=\"text\" id=\"SymbType\" size=16 [value]=\"symbTypeText\" /><br>\n\n  <label for=\"ReadTime\">Time:</label>\n  <input type=\"text\" id=\"ReadTime\" size=24 [value]=\"readTimeText\" /><br>\n</div>\n\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -94,116 +94,35 @@ __webpack_require__.r(__webpack_exports__);
 
 let AppComponent = class AppComponent {
     constructor() {
-        this.readerNames = [];
         this.barcodeDataText = '';
         this.symbTypeText = '';
         this.readTimeText = '';
-        this.openButtonDisabled = false;
-        this.closeButtonDisabled = true;
-        this.logMessage = '';
         // Use the component constructor to inject providers.
     }
     ngOnInit() {
-        this.barcodeReaders = new BarcodeReaders(result => this.refreshReaderNames(result));
+        this.barcodeReaders = new BarcodeReaders(this.handleBarcodeReadersComplete);
     }
-    refreshReaderNames(result) {
-        if (result.status !== 0) {
-            alert('Failed to get barcode readers!');
-            return;
+    handleBarcodeReadersComplete(result) {
+        if (result.status === 0 && this.barcodeReaders != null) {
+            this.barcodeReaders.getAvailableBarcodeReaders(this.handleGetAvailableBarcodeReadersComplete);
         }
-        console.log(this.barcodeReaders);
-        if (this.barcodeReaders != null) {
-            this.readerNames = this.barcodeReaders.getAvailableBarcodeReaders();
-            console.log(this.readerNames);
+    }
+    handleGetAvailableBarcodeReadersComplete(result) {
+        if (result.length > 0) {
+            this.barcodeReader = new BarcodeReader(result[0], this.configureBarcodeReader, false);
         }
     }
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
-    onBarcodeReaderComplete(result) {
-        console.log(result);
+    configureBarcodeReader(result) {
         if (result.status === 0) {
-            // BarcodeReader object was successfully created
-            this.logMessage = 'BarcodeReader object successfully created';
-            this.updateUI(true, true);
-            // Configure the symbologies needed. Buffer the settings and commit them at once.
-            this.barcodeReader.setBuffered('Symbology', 'Code39', 'Enable', 'true', result => this.onSetBufferedComplete(result));
-            this.barcodeReader.setBuffered('Symbology', 'Code128', 'EnableCode128', 'true', result => this.onSetBufferedComplete(result));
-            this.barcodeReader.commitBuffer(resultArray => this.onCommitComplete(resultArray));
-            // Add an event handler for the barcodedataready event
-            this.barcodeReader.addEventListener('barcodedataready', (data, type, time) => this.onBarcodeDataReady(data, type, time), false);
-            // Add an event handler for the window's beforeunload event
-            window.addEventListener('beforeunload', e => this.onBeforeUnload(e));
-        }
-        else {
-            this.barcodeReader = null;
-            this.logMessage += '<p style="color:red">Failed to create BarcodeReader, ' +
-                'status: ' + result.status + ', ' +
-                'message: ' + result.message + '</p>';
-        }
-    }
-    // Verify the symbology configuration
-    onSetBufferedComplete(result) {
-        if (result.status !== 0) {
-            this.logMessage += '<p style="color:red">setBuffered failed, status: ' + result.status + ', message: ' + result.message + '</p>';
-            this.logMessage += '<p>Family=' + result.family + ' Key=' + result.key + ' Option=' + result.option + '</p>';
-        }
-    }
-    onCommitComplete(resultArray) {
-        if (resultArray.length > 0) {
-            for (const result of resultArray) {
-                if (result.status !== 0) {
-                    this.logMessage += '<p style="color:red">commitBuffer failed, status: ' + result.status + ', message: ' + result.message + '</p>';
-                    if (result.method === 'getBuffered' || result.method === 'setBuffered') {
-                        this.logMessage += '<p>Method=' + result.method +
-                            ' Family=' + result.family +
-                            ' Key=' + result.key +
-                            ' Option=' + result.option + '</p>';
-                    }
-                }
-            }
+            this.barcodeReader.addEventListener('barcodedataready', this.handleBarcodeData, false);
         }
     }
     // Handle barcode data when available
-    onBarcodeDataReady(data, type, time) {
+    handleBarcodeData(data, type, time) {
         this.barcodeDataText = data;
         this.symbTypeText = type;
         this.readTimeText = time;
-    }
-    updateUI(readerOpened, clearData) {
-        this.openButtonDisabled = readerOpened;
-        this.closeButtonDisabled = !readerOpened;
-        if (clearData) {
-            this.barcodeDataText = '';
-            this.symbTypeText = '';
-            this.readTimeText = '';
-        }
-    }
-    openBarcodeReader() {
-        if (!this.barcodeReader) {
-            this.barcodeReader = new BarcodeReader(null, result => this.onBarcodeReaderComplete(result));
-            console.log(this.barcodeReader);
-        }
-    }
-    closeBarcodeReader() {
-        if (this.barcodeReader) {
-            this.barcodeReader.close(result => {
-                if (result.status === 0) {
-                    this.logMessage += '<p style="color:blue">BarcodeReader successfully closed.</p>';
-                    this.barcodeReader = null;
-                    this.updateUI(false, false);
-                    window.removeEventListener('beforeunload', e => this.onBeforeUnload(e));
-                }
-                else {
-                    this.logMessage += '<p style="color:red">Failed to close BarcodeReader, ' +
-                        'status: ' + result.status + ', ' +
-                        'message: ' + result.message + '</p>';
-                }
-            });
-        }
-    }
-    onBeforeUnload(e) {
-        const message = 'Please close BarcodeReader before leaving this page.';
-        e.returnValue = message;
-        return message;
     }
 };
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
