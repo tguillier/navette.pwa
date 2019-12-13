@@ -100,22 +100,22 @@ let AppComponent = class AppComponent {
         // Use the component constructor to inject providers.
     }
     ngOnInit() {
-        this.barcodeReaders = new BarcodeReaders(this.handleBarcodeReadersComplete);
+        this.barcodeReaders = new BarcodeReaders((result) => this.handleBarcodeReadersComplete(result));
     }
     handleBarcodeReadersComplete(result) {
         if (result.status === 0 && this.barcodeReaders != null) {
-            this.barcodeReaders.getAvailableBarcodeReaders(this.handleGetAvailableBarcodeReadersComplete);
+            this.barcodeReaders.getAvailableBarcodeReaders((result) => this.handleGetAvailableBarcodeReadersComplete(result));
         }
     }
     handleGetAvailableBarcodeReadersComplete(result) {
         if (result.length > 0) {
-            this.barcodeReader = new BarcodeReader(result[0], this.configureBarcodeReader, false);
+            this.barcodeReader = new BarcodeReader(result[0], (result) => this.configureBarcodeReader(result), false);
         }
     }
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     configureBarcodeReader(result) {
         if (result.status === 0) {
-            this.barcodeReader.addEventListener('barcodedataready', this.handleBarcodeData, false);
+            this.barcodeReader.addEventListener('barcodedataready', (data, type, time) => this.handleBarcodeData(data, type, time), false);
         }
     }
     // Handle barcode data when available

@@ -103,22 +103,26 @@ var AppComponent = /** @class */ (function () {
         // Use the component constructor to inject providers.
     }
     AppComponent.prototype.ngOnInit = function () {
-        this.barcodeReaders = new BarcodeReaders(this.handleBarcodeReadersComplete);
+        var _this = this;
+        this.barcodeReaders = new BarcodeReaders(function (result) { return _this.handleBarcodeReadersComplete(result); });
     };
     AppComponent.prototype.handleBarcodeReadersComplete = function (result) {
+        var _this = this;
         if (result.status === 0 && this.barcodeReaders != null) {
-            this.barcodeReaders.getAvailableBarcodeReaders(this.handleGetAvailableBarcodeReadersComplete);
+            this.barcodeReaders.getAvailableBarcodeReaders(function (result) { return _this.handleGetAvailableBarcodeReadersComplete(result); });
         }
     };
     AppComponent.prototype.handleGetAvailableBarcodeReadersComplete = function (result) {
+        var _this = this;
         if (result.length > 0) {
-            this.barcodeReader = new BarcodeReader(result[0], this.configureBarcodeReader, false);
+            this.barcodeReader = new BarcodeReader(result[0], function (result) { return _this.configureBarcodeReader(result); }, false);
         }
     };
     // After BarcodeReader object is created we can configure our symbologies and add our event listener
     AppComponent.prototype.configureBarcodeReader = function (result) {
+        var _this = this;
         if (result.status === 0) {
-            this.barcodeReader.addEventListener('barcodedataready', this.handleBarcodeData, false);
+            this.barcodeReader.addEventListener('barcodedataready', function (data, type, time) { return _this.handleBarcodeData(data, type, time); }, false);
         }
     };
     // Handle barcode data when available
